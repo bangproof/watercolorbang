@@ -129,9 +129,6 @@ html, body {
   color: var(--accent);
 }
 
-.footer .footer__version {
-  font-size: 0.0875rem;
-}
 
 @media (min-width: 640px) {
   .gallery__grid {
