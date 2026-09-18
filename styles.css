@@ -38,6 +38,8 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .banner {
