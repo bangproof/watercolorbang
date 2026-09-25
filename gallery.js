@@ -8,6 +8,7 @@ fetch("gallery.json")
     const lightboxImage = document.getElementById("lightbox-image");
     const lightboxCaption = document.getElementById("lightbox-caption");
     const lightboxClose = document.getElementById("lightbox-close");
+    const lightboxInfo = document.getElementById("lightbox-info");
     const lightboxPrev = document.getElementById("lightbox-prev");
     const lightboxNext = document.getElementById("lightbox-next");
 
@@ -59,7 +60,14 @@ fetch("gallery.json")
       return promise;
     }
 
-    function updateCaption(painting, meta) {
+    // The caption is hidden by default to give the image more room;
+    // tapping the info button reveals it for a couple seconds, then
+    // it fades back out on its own.
+    const CAPTION_DISPLAY_MS = 2000;
+    let captionHasContent = false;
+    let captionHideTimer = null;
+
+    function setCaptionContent(painting, meta) {
       const lines = [];
       if (painting.title) {
         lines.push(painting.year ? `${painting.title}, ${painting.year}` : painting.title);
@@ -77,7 +85,20 @@ fetch("gallery.json")
         if (i > 0) lightboxCaption.appendChild(document.createElement("br"));
         lightboxCaption.appendChild(document.createTextNode(line));
       });
-      lightboxCaption.hidden = lines.length === 0;
+      captionHasContent = lines.length > 0;
+    }
+
+    function hideCaption() {
+      clearTimeout(captionHideTimer);
+      captionHideTimer = null;
+      lightboxCaption.hidden = true;
+    }
+
+    function showCaption() {
+      if (!captionHasContent) return;
+      clearTimeout(captionHideTimer);
+      lightboxCaption.hidden = false;
+      captionHideTimer = setTimeout(hideCaption, CAPTION_DISPLAY_MS);
     }
 
     function applyTransform() {
@@ -104,13 +125,14 @@ fetch("gallery.json")
       const painting = paintings[currentIndex];
       const requestId = ++renderRequestId;
       resetZoom();
+      hideCaption();
       lightboxImage.src = painting.file;
       lightboxImage.alt = painting.title || "";
-      updateCaption(painting, {});
+      setCaptionContent(painting, {});
 
       fetchEmbeddedMetadata(painting.file).then((meta) => {
         if (requestId !== renderRequestId) return;
-        updateCaption(painting, meta);
+        setCaptionContent(painting, meta);
       });
     }
 
@@ -121,6 +143,7 @@ fetch("gallery.json")
     }
 
     function closeLightbox() {
+      hideCaption();
       lightbox.hidden = true;
       lightboxImage.src = "";
       document.body.style.overflow = "";
@@ -135,6 +158,7 @@ fetch("gallery.json")
     }
 
     lightboxClose.addEventListener("click", closeLightbox);
+    lightboxInfo.addEventListener("click", showCaption);
     lightboxPrev.addEventListener("click", showPrev);
     lightboxNext.addEventListener("click", showNext);
     lightbox.addEventListener("click", (event) => {

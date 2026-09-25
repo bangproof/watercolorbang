@@ -37,12 +37,19 @@
 
   <div class="lightbox" id="lightbox" hidden>
     <button class="lightbox__close" id="lightbox-close" aria-label="Close">&times;</button>
+    <button class="lightbox__info" id="lightbox-info" aria-label="Info" title="Info">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="11" x2="12" y2="16"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+    </button>
     <button class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="Previous painting">&#8249;</button>
     <button class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="Next painting">&#8250;</button>
     <div class="lightbox__stage" id="lightbox-stage">
       <img class="lightbox__image" id="lightbox-image" alt="">
     </div>
-    <p class="lightbox__caption" id="lightbox-caption"></p>
+    <p class="lightbox__caption" id="lightbox-caption" hidden></p>
   </div>
 
   <script src="gallery.js?v=__CACHE_BUST__" defer></script>
